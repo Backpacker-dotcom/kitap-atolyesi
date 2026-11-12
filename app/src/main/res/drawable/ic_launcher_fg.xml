@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Açık kitap + kalem ucu -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <path android:fillColor="#FBF7F0"
+        android:pathData="M54,40 C47,35 38,34 30,36 L30,72 C38,70 47,71 54,76 Z" />
+    <path android:fillColor="#F1E4CF"
+        android:pathData="M54,40 C61,35 70,34 78,36 L78,72 C70,70 61,71 54,76 Z" />
+    <path android:fillColor="#00000000" android:strokeColor="#9A4F24" android:strokeWidth="1.5"
+        android:pathData="M35,45 L48,47 M35,51 L48,53 M35,57 L48,59 M60,47 L73,45 M60,53 L73,51" />
+    <path android:fillColor="#E8B04A" android:pathData="M66,56 L74,64 L70,68 L62,60 Z" />
+    <path android:fillColor="#FBF7F0" android:pathData="M62,60 L60,70 L70,68 Z" />
+</vector>

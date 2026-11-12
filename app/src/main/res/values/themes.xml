@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.Kitap" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">#FBF7F0</item>
+        <item name="android:statusBarColor">#7A3E1D</item>
+        <item name="android:navigationBarColor">#FBF7F0</item>
+    </style>
+</resources>
