@@ -1,0 +1,116 @@
+e: file:///home/runner/work/kitap-atolyesi/kitap-atolyesi/app/src/main/java/com/ufuk/kitap/ui/ReaderScreen.kt:57:9 Platform declaration clash: The following declarations have the same JVM signature (setTheme(Lcom/ufuk/kitap/ui/ReadTheme;)V):
+    fun `<set-theme>`(`<set-?>`: ReadTheme): Unit defined in com.ufuk.kitap.ui.ReadSettings
+    fun setTheme(t: ReadTheme): Unit defined in com.ufuk.kitap.ui.ReadSettings
+e: file:///home/runner/work/kitap-atolyesi/kitap-atolyesi/app/src/main/java/com/ufuk/kitap/ui/ReaderScreen.kt:59:9 Platform declaration clash: The following declarations have the same JVM signature (setSerif(Z)V):
+    fun `<set-serif>`(`<set-?>`: Boolean): Unit defined in com.ufuk.kitap.ui.ReadSettings
+    fun setSerif(v: Boolean): Unit defined in com.ufuk.kitap.ui.ReadSettings
+e: file:///home/runner/work/kitap-atolyesi/kitap-atolyesi/app/src/main/java/com/ufuk/kitap/ui/ReaderScreen.kt:64:5 Platform declaration clash: The following declarations have the same JVM signature (setTheme(Lcom/ufuk/kitap/ui/ReadTheme;)V):
+    fun `<set-theme>`(`<set-?>`: ReadTheme): Unit defined in com.ufuk.kitap.ui.ReadSettings
+    fun setTheme(t: ReadTheme): Unit defined in com.ufuk.kitap.ui.ReadSettings
+e: file:///home/runner/work/kitap-atolyesi/kitap-atolyesi/app/src/main/java/com/ufuk/kitap/ui/ReaderScreen.kt:65:5 Platform declaration clash: The following declarations have the same JVM signature (setSerif(Z)V):
+    fun `<set-serif>`(`<set-?>`: Boolean): Unit defined in com.ufuk.kitap.ui.ReadSettings
+    fun setSerif(v: Boolean): Unit defined in com.ufuk.kitap.ui.ReadSettings
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run-1794513323129.json
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileReleaseKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+
+----- SON 150 SATIR -----
+Downloading https://services.gradle.org/distributions/gradle-8.13-bin.zip
+.............10%.............20%.............30%.............40%.............50%.............60%.............70%.............80%.............90%.............100%
+
+Welcome to Gradle 8.13!
+
+Here are the highlights of this release:
+ - Daemon JVM auto-provisioning
+ - Enhancements for Scala plugin and JUnit testing
+ - Improvements for build authors and plugin developers
+
+For more details see https://docs.gradle.org/8.13/release-notes.html
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.13/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+w: file:///home/runner/work/kitap-atolyesi/kitap-atolyesi/app/build.gradle.kts:42:9: 'jvmTarget: String' is deprecated. Please migrate to the compilerOptions DSL. More details are here: https://kotl.in/u1r8ln
+
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :app:mergeReleaseJniLibFolders
+> Task :app:mergeReleaseNativeLibs
+
+> Task :app:stripReleaseDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so. Run with --info option to learn more.
+
+> Task :app:checkReleaseDuplicateClasses
+> Task :app:buildKotlinToolingMetadata
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:extractReleaseNativeSymbolTables
+> Task :app:mergeReleaseNativeDebugMetadata NO-SOURCE
+> Task :app:generateReleaseResValues
+> Task :app:checkReleaseAarMetadata
+> Task :app:mapReleaseSourceSetPaths
+> Task :app:generateReleaseResources
+> Task :app:packageReleaseResources
+> Task :app:mergeReleaseResources
+> Task :app:createReleaseCompatibleScreenManifests
+> Task :app:extractDeepLinksRelease
+> Task :app:parseReleaseLocalResources
+> Task :app:processReleaseMainManifest
+> Task :app:processReleaseManifest
+> Task :app:processReleaseManifestForPackage
+> Task :app:javaPreCompileRelease
+> Task :app:desugarReleaseFileDependencies
+> Task :app:mergeReleaseStartupProfile
+> Task :app:processReleaseResources
+> Task :app:mergeExtDexRelease
+> Task :app:mergeReleaseArtProfile
+> Task :app:mergeReleaseShaders
+> Task :app:compileReleaseShaders NO-SOURCE
+> Task :app:generateReleaseAssets UP-TO-DATE
+> Task :app:mergeReleaseAssets
+> Task :app:extractReleaseVersionControlInfo
+> Task :app:extractProguardFiles
+> Task :app:compressReleaseAssets
+> Task :app:collectReleaseDependencies
+> Task :app:sdkReleaseDependencyData
+> Task :app:validateSigningRelease
+> Task :app:writeReleaseAppMetadata
+> Task :app:writeReleaseSigningConfigVersions
+> Task :app:optimizeReleaseResources
+
+> Task :app:compileReleaseKotlin FAILED
+e: file:///home/runner/work/kitap-atolyesi/kitap-atolyesi/app/src/main/java/com/ufuk/kitap/ui/ReaderScreen.kt:57:9 Platform declaration clash: The following declarations have the same JVM signature (setTheme(Lcom/ufuk/kitap/ui/ReadTheme;)V):
+    fun `<set-theme>`(`<set-?>`: ReadTheme): Unit defined in com.ufuk.kitap.ui.ReadSettings
+    fun setTheme(t: ReadTheme): Unit defined in com.ufuk.kitap.ui.ReadSettings
+e: file:///home/runner/work/kitap-atolyesi/kitap-atolyesi/app/src/main/java/com/ufuk/kitap/ui/ReaderScreen.kt:59:9 Platform declaration clash: The following declarations have the same JVM signature (setSerif(Z)V):
+    fun `<set-serif>`(`<set-?>`: Boolean): Unit defined in com.ufuk.kitap.ui.ReadSettings
+    fun setSerif(v: Boolean): Unit defined in com.ufuk.kitap.ui.ReadSettings
+e: file:///home/runner/work/kitap-atolyesi/kitap-atolyesi/app/src/main/java/com/ufuk/kitap/ui/ReaderScreen.kt:64:5 Platform declaration clash: The following declarations have the same JVM signature (setTheme(Lcom/ufuk/kitap/ui/ReadTheme;)V):
+    fun `<set-theme>`(`<set-?>`: ReadTheme): Unit defined in com.ufuk.kitap.ui.ReadSettings
+    fun setTheme(t: ReadTheme): Unit defined in com.ufuk.kitap.ui.ReadSettings
+e: file:///home/runner/work/kitap-atolyesi/kitap-atolyesi/app/src/main/java/com/ufuk/kitap/ui/ReaderScreen.kt:65:5 Platform declaration clash: The following declarations have the same JVM signature (setSerif(Z)V):
+    fun `<set-serif>`(`<set-?>`: Boolean): Unit defined in com.ufuk.kitap.ui.ReadSettings
+    fun setSerif(v: Boolean): Unit defined in com.ufuk.kitap.ui.ReadSettings
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run-1794513323129.json
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileReleaseKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 2m 20s
+36 actionable tasks: 36 executed
