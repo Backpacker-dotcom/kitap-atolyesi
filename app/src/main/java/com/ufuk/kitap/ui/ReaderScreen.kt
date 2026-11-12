@@ -61,8 +61,8 @@ class ReadSettings(private val prefs: Prefs) {
         private set
 
     fun setFont(v: Int) { fontPct = v.coerceIn(70, 240); prefs.setInt("read_font", fontPct) }
-    fun setTheme(t: ReadTheme) { theme = t; prefs.setInt("read_theme", t.ordinal) }
-    fun setSerif(v: Boolean) { serif = v; prefs.setBool("read_serif", v) }
+    fun pickTheme(t: ReadTheme) { theme = t; prefs.setInt("read_theme", t.ordinal) }
+    fun pickSerif(v: Boolean) { serif = v; prefs.setBool("read_serif", v) }
     fun setLine(v: Float) { lineHeight = v; prefs.setInt("read_lh", (v * 100).toInt()) }
 }
 
@@ -127,12 +127,12 @@ fun ReadSettingsDialog(s: ReadSettings, onDismiss: () -> Unit) {
                 Spacer(Modifier.padding(4.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     ReadTheme.entries.forEach { t ->
-                        FilterChip(selected = s.theme == t, onClick = { s.setTheme(t) }, label = { Text(t.label) })
+                        FilterChip(selected = s.theme == t, onClick = { s.pickTheme(t) }, label = { Text(t.label) })
                     }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterChip(selected = s.serif, onClick = { s.setSerif(true) }, label = { Text("Tırnaklı", fontFamily = FontFamily.Serif) })
-                    FilterChip(selected = !s.serif, onClick = { s.setSerif(false) }, label = { Text("Tırnaksız", fontFamily = FontFamily.SansSerif) })
+                    FilterChip(selected = s.serif, onClick = { s.pickSerif(true) }, label = { Text("Tırnaklı", fontFamily = FontFamily.Serif) })
+                    FilterChip(selected = !s.serif, onClick = { s.pickSerif(false) }, label = { Text("Tırnaksız", fontFamily = FontFamily.SansSerif) })
                 }
             }
         },
