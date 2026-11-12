@@ -198,11 +198,9 @@ object Importers {
                 stripper.endPage = i
                 sb.append(joinLines(stripper.getText(doc))).append("\n\n")
             }
-            val t = doc.documentInformation?.title
-            if (!t.isNullOrBlank()) return Imported(t, splitText(sb.toString()))
         }
-        if (sb.isBlank()) error("Bu PDF'de seçilebilir metin yok (taranmış sayfa olabilir)")
-        return Imported(name.substringBeforeLast('.'), splitText(sb.toString()))
+        if (sb.isBlank()) error("Bu PDF'de seçilebilir metin yok. Sayfalar resim olarak taranmış olabilir; böyle PDF'ler yalnızca Kitaplığım'da kitap gibi okunabilir.")
+        return Imported(name.substringBeforeLast('.').replace('_', ' '), splitText(sb.toString()))
     }
 
     /** PDF'deki satır sonlarını paragraflara çevirir. */

@@ -107,6 +107,7 @@ fun LibraryScreen(
     var deleteMs by remember { mutableStateOf<Manuscript?>(null) }
     var newMenu by remember { mutableStateOf(false) }
     var importKind by remember { mutableStateOf("") }
+    var importError by remember { mutableStateOf<String?>(null) }
     var crash by remember { mutableStateOf(File(ctx.filesDir, "crash.txt").let { if (it.exists()) it.readText() else null }) }
 
     val pickBook = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
@@ -136,12 +137,18 @@ fun LibraryScreen(
                         Files.copyUriTo(ctx, uri, tmp)
                         try {
                             val m0 = app.repo.newManuscript()
-                            val imp: Imported = when (kind) {
-                                "docx" -> Importers.fromDocx(tmp, name, app.repo.imagesDir(m0.id))
-                                "pdf" -> Importers.fromPdf(ctx, tmp, name)
-                                else -> Importers.fromTxt(tmp, name)
+                            try {
+                                val imp: Imported = when (kind) {
+                                    "docx" -> Importers.fromDocx(tmp, name, app.repo.imagesDir(m0.id))
+                                    "pdf" -> Importers.fromPdf(ctx, tmp, name)
+                                    else -> Importers.fromTxt(tmp, name)
+                                }
+                                app.repo.saveManuscript(m0.copy(title = imp.title, chapters = imp.chapters))
+                            } catch (e: Throwable) {
+                                // Yarım kalan boş kitabı bırakma
+                                app.repo.deleteManuscript(m0.id, remember = false)
+                                throw e
                             }
-                            app.repo.saveManuscript(m0.copy(title = imp.title, chapters = imp.chapters))
                             m0.id
                         } finally {
                             tmp.delete()
@@ -149,7 +156,7 @@ fun LibraryScreen(
                     }
                     openManuscript(id)
                 } catch (e: Throwable) {
-                    toast(ctx, "Dönüştürülemedi: ${e.message}")
+                    importError = (e.message ?: e.javaClass.simpleName)
                 }
                 busy = null
             }
@@ -247,6 +254,15 @@ fun LibraryScreen(
         },
         confirmButton = { TextButton(onClick = { newMenu = false }) { Text("Kapat") } },
     )
+
+    importError?.let { e ->
+        AlertDialog(
+            onDismissRequest = { importError = null },
+            title = { Text("Dosya dönüştürülemedi") },
+            text = { Text(e) },
+            confirmButton = { TextButton(onClick = { importError = null }) { Text("Tamam") } },
+        )
+    }
 
     crash?.let { c ->
         AlertDialog(
