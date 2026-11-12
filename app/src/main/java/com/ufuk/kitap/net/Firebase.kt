@@ -12,8 +12,8 @@ import java.net.URLEncoder
  */
 class Firebase(private val prefs: Prefs) {
 
-    val apiKey get() = prefs.str("fb_api_key").trim()
-    val projectId get() = prefs.str("fb_project").trim()
+    val apiKey get() = prefs.str("fb_api_key").trim().ifEmpty { DEFAULT_API_KEY }
+    val projectId get() = prefs.str("fb_project").trim().ifEmpty { DEFAULT_PROJECT }
     val uid get() = prefs.str("fb_uid")
     val email get() = prefs.str("fb_email")
     val isConfigured get() = apiKey.isNotEmpty() && projectId.isNotEmpty()
@@ -124,6 +124,10 @@ class Firebase(private val prefs: Prefs) {
     }
 
     companion object {
+        // Ufuk'un "kitap-atolyesi" Firebase projesi (web anahtarı gizli değildir; erişimi Firestore kuralları korur)
+        const val DEFAULT_API_KEY = "AIzaSyABOtxF7CfykMMADilhgr6kYAi1t2M_T04"
+        const val DEFAULT_PROJECT = "kitap-atolyesi"
+
         fun s(v: String) = JSONObject().put("stringValue", v)
         fun i(v: Long) = JSONObject().put("integerValue", v.toString())
         fun d(v: Double) = JSONObject().put("doubleValue", v)

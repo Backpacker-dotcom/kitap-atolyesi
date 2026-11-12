@@ -77,8 +77,9 @@ fun SettingsScreen(app: App, onBack: () -> Unit, sync: () -> Unit) {
     var geminiKey by remember { mutableStateOf(p.str("gemini_key")) }
     var geminiModel by remember { mutableStateOf(p.str("gemini_model", "gemini-2.5-flash")) }
     var testing by remember { mutableStateOf(false) }
-    var fbKey by remember { mutableStateOf(p.str("fb_api_key")) }
-    var fbProject by remember { mutableStateOf(p.str("fb_project")) }
+    var fbKey by remember { mutableStateOf(app.firebase.apiKey) }
+    var fbProject by remember { mutableStateOf(app.firebase.projectId) }
+    var advanced by remember { mutableStateOf(false) }
     var email by remember { mutableStateOf(p.str("fb_email")) }
     var password by remember { mutableStateOf("") }
     var signedIn by remember { mutableStateOf(app.firebase.isSignedIn) }
@@ -133,8 +134,12 @@ fun SettingsScreen(app: App, onBack: () -> Unit, sync: () -> Unit) {
                             fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         if (!signedIn) {
-                            OutlinedTextField(fbKey, { fbKey = it.trim() }, label = { Text("Web API anahtarı (AIza…)") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-                            OutlinedTextField(fbProject, { fbProject = it.trim() }, label = { Text("Proje kimliği (Project ID)") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+                            if (advanced) {
+                                OutlinedTextField(fbKey, { fbKey = it.trim() }, label = { Text("Web API anahtarı (AIza…)") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+                                OutlinedTextField(fbProject, { fbProject = it.trim() }, label = { Text("Proje kimliği (Project ID)") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+                            } else {
+                                Text("Proje: $fbProject", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
                             OutlinedTextField(email, { email = it.trim() }, label = { Text("E-posta") }, singleLine = true,
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email), modifier = Modifier.fillMaxWidth())
                             OutlinedTextField(password, { password = it }, label = { Text("Şifre (en az 6 karakter)") }, singleLine = true,
@@ -163,6 +168,7 @@ fun SettingsScreen(app: App, onBack: () -> Unit, sync: () -> Unit) {
                                 if (syncing) CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
                             }
                         }
+                        if (!signedIn && !advanced) TextButton(onClick = { advanced = true }) { Text("Farklı Firebase projesi kullan") }
                         TextButton(onClick = { copy(ctx, FIRESTORE_RULES); toast(ctx, "Firestore kuralları kopyalandı") }) {
                             Text("Firestore güvenlik kurallarını kopyala")
                         }
