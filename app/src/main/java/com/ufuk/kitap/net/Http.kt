@@ -56,10 +56,45 @@ object Http {
 }
 
 object Gemini {
-    /** Gemini'ye metin istemi gönderir, yanıt metnini döndürür. */
+    // İstenen model kapatılmışsa bulunan güncel model burada tutulur
+    private val resolved = HashMap<String, String>()
+
+    /** Hesapta kullanılabilen en yeni "flash" modelini bulur. */
+    private fun pickModel(apiKey: String): String? {
+        val res = JSONObject(Http.request("GET", "https://generativelanguage.googleapis.com/v1beta/models?pageSize=200", headers = mapOf("x-goog-api-key" to apiKey.trim())))
+        val arr = res.optJSONArray("models") ?: return null
+        val names = ArrayList<String>()
+        for (i in 0 until arr.length()) {
+            val o = arr.getJSONObject(i)
+            val methods = o.optJSONArray("supportedGenerationMethods")?.toString() ?: ""
+            val n = o.optString("name").removePrefix("models/")
+            if (methods.contains("generateContent") && n.startsWith("gemini-")) names.add(n)
+        }
+        val bad = listOf("lite", "image", "tts", "live", "preview", "exp", "audio", "embedding", "omni", "banana", "robotics", "computer")
+        fun ver(n: String) = Regex("gemini-(\\d+(?:\\.\\d+)?)").find(n)?.groupValues?.get(1)?.toDoubleOrNull() ?: 0.0
+        val clean = names.filter { n -> bad.none { n.contains(it) } }
+        return clean.filter { it.contains("flash") }.maxByOrNull { ver(it) } ?: clean.maxByOrNull { ver(it) } ?: names.firstOrNull()
+    }
+
+    /** Gemini'ye metin istemi gönderir, yanıt metnini döndürür. Model bulunamazsa güncel olanı kendisi seçer. */
     fun generate(apiKey: String, model: String, prompt: String): String {
         if (apiKey.isBlank()) throw IllegalStateException("Önce Ayarlar'dan Gemini API anahtarını gir")
-        val m = model.ifBlank { "gemini-2.5-flash" }.trim()
+        val asked = model.ifBlank { "gemini-3.6-flash" }.trim()
+        val m = resolved[asked] ?: asked
+        return try {
+            call(apiKey, m, prompt)
+        } catch (e: HttpError) {
+            val msg = e.message ?: ""
+            if (e.code == 404 || msg.contains("not found", true) || msg.contains("no longer", true) || msg.contains("not supported", true)) {
+                val alt = pickModel(apiKey) ?: throw e
+                if (alt == m) throw e
+                resolved[asked] = alt
+                call(apiKey, alt, prompt)
+            } else throw e
+        }
+    }
+
+    private fun call(apiKey: String, m: String, prompt: String): String {
         val body = JSONObject()
             .put("contents", JSONArray().put(JSONObject().put("role", "user").put("parts", JSONArray().put(JSONObject().put("text", prompt)))))
             .put("generationConfig", JSONObject().put("temperature", 0.7))

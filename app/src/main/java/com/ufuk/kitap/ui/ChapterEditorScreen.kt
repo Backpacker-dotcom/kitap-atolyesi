@@ -159,7 +159,7 @@ fun ChapterEditorScreen(app: App, msId: String, chapterId: String, onBack: () ->
         aiBusy = true
         scope.launch {
             try {
-                val res = withContext(Dispatchers.IO) { Gemini.generate(key, app.prefs.str("gemini_model", "gemini-2.5-flash"), prompt) }
+                val res = withContext(Dispatchers.IO) { Gemini.generate(key, app.prefs.str("gemini_model", "gemini-3.6-flash"), prompt) }
                 aiResult = AiResult(kind, res, if (selected.isEmpty()) TextRange(0, body.text.length) else sel)
             } catch (e: Exception) {
                 toast(ctx, "Yapay zekâ hatası: ${e.message}")

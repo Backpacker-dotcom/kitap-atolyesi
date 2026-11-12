@@ -36,6 +36,19 @@ class Sync(private val ctx: Context, private val repo: Repo, private val fb: Fir
             status("Silinenler işleniyor…")
             processDeletes()
 
+            // ---------- Ayarlar: Gemini anahtarı bir cihaza girilince diğerine de gelsin ----------
+            try {
+                val rk = fb.get(fb.userPath("settings/app"))?.str("geminiKey") ?: ""
+                val lk = repo.prefs.str("gemini_key")
+                if (lk.isEmpty() && rk.isNotEmpty()) repo.prefs.setStr("gemini_key", rk)
+                else if (lk.isNotEmpty() && lk != rk) {
+                    val b = Firebase.Batch()
+                    fb.set(b, fb.userPath("settings/app"), JSONObject().put("geminiKey", Firebase.s(lk)))
+                    fb.commit(b)
+                }
+            } catch (_: Exception) {
+            }
+
             // ---------- Kitaplar ----------
             status("Kitaplar karşılaştırılıyor…")
             val remoteBooks = fb.list(fb.userPath("books")).associate { it.first to it.second }

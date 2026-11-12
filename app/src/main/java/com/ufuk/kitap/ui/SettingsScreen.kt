@@ -75,7 +75,7 @@ fun SettingsScreen(app: App, onBack: () -> Unit, sync: () -> Unit) {
     val scope = rememberCoroutineScope()
     val p = app.prefs
     var geminiKey by remember { mutableStateOf(p.str("gemini_key")) }
-    var geminiModel by remember { mutableStateOf(p.str("gemini_model", "gemini-2.5-flash")) }
+    var geminiModel by remember { mutableStateOf(p.str("gemini_model", "gemini-3.6-flash")) }
     var testing by remember { mutableStateOf(false) }
     var fbKey by remember { mutableStateOf(app.firebase.apiKey) }
     var fbProject by remember { mutableStateOf(app.firebase.projectId) }
@@ -180,7 +180,7 @@ fun SettingsScreen(app: App, onBack: () -> Unit, sync: () -> Unit) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text("Yapay zekâ (Gemini)", style = MaterialTheme.typography.titleMedium)
                         Text(
-                            "Yazım düzeltme, akıcılaştırma, devam önerisi ve başlık önerisi için. Anahtarı Google AI Studio'dan ücretsiz alabilirsin.",
+                            "Yazım düzeltme, akıcılaştırma, devam önerisi ve başlık önerisi için. \"Anahtar al\"a dokun, Google hesabınla gir, \"Create API key\" ile oluşturduğun anahtarı kopyalayıp buraya yapıştır ve \"Dene\"ye bas. Bir cihaza girmen yeter; eşitlemeyle diğerine de gelir.",
                             fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         OutlinedTextField(geminiKey, { geminiKey = it.trim(); p.setStr("gemini_key", it.trim()) }, label = { Text("Gemini API anahtarı") }, singleLine = true, modifier = Modifier.fillMaxWidth())

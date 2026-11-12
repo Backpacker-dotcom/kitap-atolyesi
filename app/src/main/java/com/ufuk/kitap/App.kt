@@ -26,6 +26,8 @@ class App : Application() {
             prev?.uncaughtException(t, e)
         }
         prefs = Prefs(this)
+        // Kapatılan eski model adı kayıtlıysa güncel varsayılana dön
+        if (prefs.str("gemini_model") == "gemini-2.5" + "-flash") prefs.setStr("gemini_model", "gemini-3.6-flash")
         repo = Repo(this, prefs)
         repo.load()
         firebase = Firebase(prefs)
