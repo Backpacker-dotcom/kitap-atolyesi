@@ -76,6 +76,7 @@ private class PdfDoc(file: File) {
     }
 
     suspend fun render(i: Int, widthPx: Int): ImageBitmap = lock.withLock {
+        check(!closed) { "kapalı" }
         val key = "$i@$widthPx"
         cache[key]?.let { return@withLock it }
         withContext(Dispatchers.IO) {
@@ -90,8 +91,14 @@ private class PdfDoc(file: File) {
         }.also { cache[key] = it }
     }
 
+    @Volatile var closed = false
+
     fun close() {
-        try { renderer.close(); pfd.close() } catch (_: Exception) {}
+        closed = true
+        // Çizim sürüyorsa bitmesini bekleyip kapat
+        Thread {
+            kotlinx.coroutines.runBlocking { lock.withLock { try { renderer.close(); pfd.close() } catch (_: Exception) {} } }
+        }.start()
     }
 }
 
@@ -100,8 +107,9 @@ fun PdfReader(app: App, book: Book, onClose: () -> Unit) {
     val result by produceState<Result<PdfDoc>?>(null, book.id) {
         value = withContext(Dispatchers.IO) { runCatching { PdfDoc(app.repo.bookFile(book)) } }
     }
-    DisposableEffect(result) { onDispose { result?.getOrNull()?.close() } }
     val doc = result?.getOrNull()
+    // Belgeyi yalnızca ekrandan çıkınca kapat (o anki belgeyi yakala)
+    DisposableEffect(doc) { onDispose { doc?.close() } }
     if (doc == null) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             val err = result?.exceptionOrNull()
@@ -176,7 +184,9 @@ fun PdfReader(app: App, book: Book, onClose: () -> Unit) {
 
 @Composable
 private fun PdfPage(doc: PdfDoc, i: Int, widthPx: Int, modifier: Modifier) {
-    val bmp by produceState<ImageBitmap?>(null, i, widthPx) { value = doc.render(i, widthPx) }
+    val bmp by produceState<ImageBitmap?>(null, i, widthPx) {
+        value = try { doc.render(i, widthPx) } catch (e: Throwable) { null }
+    }
     Box(modifier.background(Color.White), contentAlignment = Alignment.Center) {
         val b = bmp
         if (b != null) Image(b, "Sayfa ${i + 1}", Modifier.fillMaxSize(), contentScale = ContentScale.FillBounds)

@@ -18,6 +18,9 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -104,6 +107,7 @@ fun LibraryScreen(
     var deleteMs by remember { mutableStateOf<Manuscript?>(null) }
     var newMenu by remember { mutableStateOf(false) }
     var importKind by remember { mutableStateOf("") }
+    var crash by remember { mutableStateOf(File(ctx.filesDir, "crash.txt").let { if (it.exists()) it.readText() else null }) }
 
     val pickBook = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
         if (uri != null) {
@@ -244,6 +248,21 @@ fun LibraryScreen(
         confirmButton = { TextButton(onClick = { newMenu = false }) { Text("Kapat") } },
     )
 
+    crash?.let { c ->
+        AlertDialog(
+            onDismissRequest = { File(ctx.filesDir, "crash.txt").delete(); crash = null },
+            title = { Text("Uygulama az önce kapandı") },
+            text = {
+                Column(Modifier.heightIn(max = 380.dp).verticalScroll(rememberScrollState())) {
+                    Text("Bu ekranın görüntüsünü Claude'a gönder, düzeltsin:", fontSize = 13.sp)
+                    Spacer(Modifier.height(6.dp))
+                    Text(c, fontSize = 10.sp, lineHeight = 12.sp, fontFamily = FontFamily.Monospace)
+                }
+            },
+            confirmButton = { TextButton(onClick = { File(ctx.filesDir, "crash.txt").delete(); crash = null }) { Text("Tamam") } },
+        )
+    }
+
     deleteBook?.let { b ->
         ConfirmDialog("Kitabı sil", "\"${b.title}\" kitaplıktan silinsin mi?", onConfirm = { app.repo.deleteBook(b.id) }, onDismiss = { deleteBook = null })
     }
@@ -279,7 +298,7 @@ private fun BookGrid(app: App, books: List<Book>, open: (String) -> Unit, askDel
                     )
                 }
                 Spacer(Modifier.height(6.dp))
-                LinearProgressIndicator(progress = { b.percent.coerceIn(0f, 1f) }, modifier = Modifier.fillMaxWidth().height(3.dp))
+                LinearProgressIndicator(progress = { b.percent.coerceIn(0f, 1f) }, modifier = Modifier.fillMaxWidth().height(3.dp), drawStopIndicator = {})
                 Spacer(Modifier.height(4.dp))
                 Text(b.title, maxLines = 2, overflow = TextOverflow.Ellipsis, fontSize = 13.sp, lineHeight = 16.sp)
                 Text(
